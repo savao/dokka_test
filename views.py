@@ -57,6 +57,9 @@ def calculate_distances():
         raise BadRequest("App can't read the file")
     uuid = str(uuid4())
     task = Task(task_id=uuid)
+    from app import db
+    db.session.add(task)
+    db.session.commit()
     thread = Thread(target=calculate, args=(task, csv_reader))
     thread.start()
     return TaskSchema(exclude=['data']).dump(task)
